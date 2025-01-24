@@ -1,0 +1,28 @@
+# Output files
+output/*
+!output/.gitkeep
+
+# Log files
+logs/*
+!logs/.gitkeep
+
+# Input files
+input/receptor/*
+!input/receptor/.gitkeep
+input/ligands/pdb/*
+!input/ligands/pdb/.gitkeep
+input/ligands/mol2/*
+!input/ligands/mol2/.gitkeep
+input/ligands/sdf/*
+!input/ligands/sdf/.gitkeep
+
+# System files
+.DS_Store
+*.swp
+*.swo
+
+# PDBQT files
+*.pdbqt
+
+# Log files
+*.log
