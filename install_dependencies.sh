@@ -87,7 +87,74 @@ install_system_dependencies() {
     esac
 }
 
-# Rest of the functions remain the same...
+# Function to install AutoDock Vina
+install_autodock_vina() {
+    print_status "Installing AutoDock Vina..."
+    
+    cd "$INSTALL_DIR"
+    wget https://vina.scripps.edu/wp-content/uploads/sites/55/2020/12/autodock_vina_1_1_2_linux_x86.tgz
+    tar xzf autodock_vina_1_1_2_linux_x86.tgz
+    rm autodock_vina_1_1_2_linux_x86.tgz
+    
+    echo "export PATH=\$PATH:$INSTALL_DIR/autodock_vina_1_1_2_linux_x86/bin" >> "$HOME/.bashrc"
+}
+
+# Function to install MGLTools
+install_mgltools() {
+    print_status "Installing MGLTools..."
+    
+    cd "$INSTALL_DIR"
+    wget https://ccsb.scripps.edu/mgltools/download/491/ -O mgltools_Linux-x86_64_1.5.7.tar.gz
+    tar xzf mgltools_Linux-x86_64_1.5.7.tar.gz
+    rm mgltools_Linux-x86_64_1.5.7.tar.gz
+    
+    cd mgltools_x86_64Linux2_1.5.7
+    
+    # Create expect script for automated installation
+    cat > install_mgl.exp << 'EOF'
+#!/usr/bin/expect
+spawn ./install.sh
+expect "Enter install dir"
+send "$INSTALL_DIR/mgltools\r"
+expect "Do you wish to install"
+send "yes\r"
+expect eof
+EOF
+    
+    chmod +x install_mgl.exp
+    ./install_mgl.exp
+    
+    echo "export MGL_ROOT=$INSTALL_DIR/mgltools" >> "$HOME/.bashrc"
+    echo "export PATH=\$PATH:\$MGL_ROOT/bin" >> "$HOME/.bashrc"
+    echo "export PYTHONPATH=\$PYTHONPATH:\$MGL_ROOT/lib/python2.7/site-packages" >> "$HOME/.bashrc"
+}
+
+# Function to install Python dependencies
+install_python_dependencies() {
+    print_status "Installing Python dependencies..."
+    
+    pip3 install numpy scipy biopython pandas matplotlib seaborn
+}
+
+# Function to verify installation
+verify_installation() {
+    print_status "Verifying installation..."
+    
+    source "$HOME/.bashrc"
+    
+    if command_exists vina; then
+        print_status "AutoDock Vina installed successfully"
+    else
+        print_error "AutoDock Vina installation failed"
+    fi
+    
+    if [ -d "$INSTALL_DIR/mgltools" ]; then
+        print_status "MGLTools installed successfully"
+    else
+        print_error "MGLTools installation failed"
+    fi
+}
+
 
 # Main installation process
 main() {
