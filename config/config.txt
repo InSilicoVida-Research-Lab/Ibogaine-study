@@ -1,0 +1,17 @@
+receptor = input/receptor/receptor.pdbqt
+ligand = input/ligands/ligand.pdbqt
+
+center_x = 0.0
+center_y = 0.0
+center_z = 0.0
+
+size_x = 20
+size_y = 20
+size_z = 20
+
+out = output/poses/docked.pdbqt
+num_modes = 9
+energy_range = 3
+
+exhaustiveness = 8
+cpu = 4
